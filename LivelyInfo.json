@@ -1,0 +1,24 @@
+{
+  "AppVersion": "1.0.0.0",
+  "Title": "CAVA Audio Visualizer",
+  "Thumbnail": "thumbnail.jpg",
+  "Preview": "preview.gif",
+  "Desc": "High-performance CAVA terminal-style audio visualizer featuring segmented LED bars, floating peak caps, custom gradients, and smooth kinetic physics.",
+  "Author": "Lively Developer",
+  "License": "MIT",
+  "Contact": "https://github.com/rocksdanister/lively",
+  "Type": 1,
+  "FileName": "index.html",
+  "Arguments": " --audio --system-information --system-nowplaying",
+  "IsAbsolutePath": false,
+  "Id": null,
+  "Tags": [
+    "audio",
+    "visualizer",
+    "cava",
+    "spectrum",
+    "music",
+    "reactive"
+  ],
+  "Version": 0
+}

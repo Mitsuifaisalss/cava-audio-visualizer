@@ -1,0 +1,640 @@
+/* ==========================================================================
+   CAVA Live Wallpaper - Core Stylesheet
+   Author: Lively Wallpaper Developer
+   ========================================================================== */
+
+:root {
+  --bg-color: #050508;
+  --theme-primary: #00F2FE;
+  --theme-secondary: #FF007F;
+  --theme-accent: #9B51E0;
+  --text-main: #FFFFFF;
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  font-family: var(--font-sans);
+  color: var(--text-main);
+  position: relative;
+}
+
+/* Custom Wallpaper Background Layer */
+.custom-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  overflow: hidden;
+  transition: filter 0.3s ease, opacity 0.4s ease;
+  transform: scale(1.02); /* Avoid blur seam artifacts */
+  will-change: filter, opacity;
+}
+
+.bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 5, 8, 0.28); /* Subtle darkening so neon visualizer and HUD pop */
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.3s ease, opacity 0.3s ease;
+}
+
+/* Background Ambient Glow */
+.ambient-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.35;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(
+    circle at 50% 90%,
+    rgba(0, 242, 254, 0.18) 0%,
+    rgba(155, 81, 224, 0.10) 40%,
+    transparent 75%
+  );
+  filter: blur(40px);
+  transform: translateZ(0);
+}
+
+/* Canvas Element */
+#cavaCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 3;
+  will-change: transform;
+}
+
+/* Minimalist HUD Clock & Telemetry */
+.hud-container {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(10, 10, 16, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 22px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* HUD Placement Variants */
+.hud-container.pos-top-right {
+  top: 36px;
+  right: 48px;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.hud-container.pos-top-center {
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  text-align: center;
+}
+
+.hud-container.pos-top-left {
+  top: 36px;
+  left: 48px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.hud-container.pos-center {
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  text-align: center;
+  padding: 24px 40px;
+}
+
+.hud-clock {
+  font-family: var(--font-mono);
+  font-size: 2.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 1.1;
+  color: #FFFFFF;
+  text-shadow: 0 0 20px rgba(0, 242, 254, 0.5), 0 0 40px rgba(255, 0, 127, 0.3);
+}
+
+.hud-container.pos-center .hud-clock {
+  font-size: 4.5rem;
+}
+
+.hud-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.hud-divider {
+  opacity: 0.3;
+}
+
+.hud-tag {
+  color: var(--theme-primary);
+  font-weight: 600;
+}
+
+/* Standalone Browser Preview HUD Controls */
+.standalone-controls {
+  position: absolute;
+  bottom: 24px;
+  right: 28px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(12, 14, 22, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 30px;
+  padding: 6px 14px 6px 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.standalone-controls.is-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(12px);
+}
+
+.standalone-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #A0AEC0;
+  letter-spacing: 0.5px;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #00FF88;
+  box-shadow: 0 0 10px #00FF88;
+  animation: pulseAnimation 1.6s infinite ease-in-out;
+}
+
+@keyframes pulseAnimation {
+  0%, 100% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+.standalone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.standalone-btn:hover {
+  background: var(--theme-primary);
+  color: #050508;
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 14px var(--theme-primary);
+}
+
+.standalone-btn:active {
+  transform: scale(0.96);
+}
+
+/* Hide HUD when toggled off */
+.is-hidden-element {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Futuristic Hardware Performance Display HUD
+   ========================================================================== */
+
+.perf-hud {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 10, 16, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+  padding: 14px 18px;
+  min-width: 440px;
+  max-width: 480px;
+}
+
+/* Performance HUD Positioning */
+.perf-hud.pos-top-left {
+  top: 36px;
+  left: 48px;
+}
+
+.perf-hud.pos-top-right {
+  top: 36px;
+  right: 48px;
+}
+
+.perf-hud.pos-bottom-left {
+  bottom: 80px;
+  left: 48px;
+}
+
+.perf-hud.pos-bottom-right {
+  bottom: 80px;
+  right: 48px;
+}
+
+/* Header */
+.perf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.perf-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+}
+
+.perf-indicator-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--theme-primary);
+  box-shadow: 0 0 8px var(--theme-primary);
+  animation: pulseAnimation 2s infinite ease-in-out;
+}
+
+.perf-fps {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--theme-primary);
+  background: rgba(0, 242, 254, 0.1);
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  border-radius: 12px;
+  padding: 2px 8px;
+  letter-spacing: 0.5px;
+}
+
+/* Metric Cards Grid */
+.perf-grid {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.perf-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.perf-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+}
+
+.perf-card-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+}
+
+.perf-card-val {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.perf-sparkline-wrap {
+  margin: 4px 0;
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.perf-canvas {
+  width: 100%;
+  height: 28px;
+  display: block;
+}
+
+.perf-meter-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.perf-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--theme-primary), var(--theme-secondary));
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.perf-meter-fill.meter-ram {
+  background: linear-gradient(90deg, #00FF88, #00F2FE);
+}
+
+.perf-meter-fill.meter-gpu {
+  background: linear-gradient(90deg, #FF007F, #FF7700);
+}
+
+.perf-card-sub {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer */
+.perf-footer {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.45);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: 6px;
+}
+
+.perf-net-icon {
+  color: var(--theme-primary);
+  margin-right: 4px;
+}
+
+.perf-footer-badge {
+  font-size: 0.58rem;
+  color: #00FF88;
+  background: rgba(0, 255, 136, 0.1);
+  padding: 1px 6px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Touhou Arcane Magic Spell Circle & Now Playing Media (Right Center)
+   ========================================================================== */
+
+.magic-circle-wrap {
+  position: absolute;
+  right: 4.5%;
+  top: 48%;
+  transform: translateY(-50%);
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magic-circle-stage {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#magicCircleCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: drop-shadow(0 0 14px var(--theme-primary));
+}
+
+/* Central Magic Core / Iris */
+.magic-core {
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(12, 14, 24, 0.9) 0%, rgba(5, 5, 8, 0.95) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 24px var(--theme-primary), inset 0 0 16px var(--theme-secondary);
+  z-index: 2;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.magic-album-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  animation: albumSpin 20s linear infinite;
+}
+
+@keyframes albumSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.magic-default-core {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.magic-rune-symbol {
+  font-size: 2.5rem;
+  color: #FFFFFF;
+  text-shadow: 0 0 14px var(--theme-primary), 0 0 28px var(--theme-secondary);
+  animation: runePulse 3s infinite ease-in-out;
+}
+
+@keyframes runePulse {
+  0%, 100% { transform: scale(0.92) rotate(0deg); opacity: 0.85; }
+  50% { transform: scale(1.08) rotate(180deg); opacity: 1; text-shadow: 0 0 22px var(--theme-primary); }
+}
+
+/* Now Playing Card */
+.now-playing-card {
+  margin-top: 14px;
+  background: rgba(8, 10, 16, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 18px;
+  min-width: 230px;
+  max-width: 290px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.now-playing-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.now-playing-badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--theme-primary);
+  text-transform: uppercase;
+}
+
+/* Animated mini audio equalizer bars */
+.now-playing-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+}
+
+.now-playing-eq span {
+  width: 2.5px;
+  background: var(--theme-primary);
+  border-radius: 1px;
+  animation: eqPulse 1.2s infinite ease-in-out alternate;
+}
+
+.now-playing-eq span:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+.now-playing-eq span:nth-child(2) { height: 80%; animation-delay: 0.3s; }
+.now-playing-eq span:nth-child(3) { height: 60%; animation-delay: 0.15s; }
+.now-playing-eq span:nth-child(4) { height: 100%; animation-delay: 0.4s; }
+
+@keyframes eqPulse {
+  0% { transform: scaleY(0.3); }
+  100% { transform: scaleY(1.0); }
+}
+
+.now-playing-title-wrap {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+.now-playing-title {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: 0.3px;
+}
+
+.now-playing-artist {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+

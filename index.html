@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>CAVA Audio Visualizer - Lively Wallpaper</title>
+  <meta name="description" content="A high-performance terminal-style CAVA audio visualizer live wallpaper for Lively Wallpaper">
+  
+  <!-- Modern Clean Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Custom Wallpaper Background Layer (Configurable in Lively Settings) -->
+  <div id="customBg" class="custom-bg">
+    <img id="bgImg" class="bg-img" alt="Background" />
+  </div>
+  <div id="bgOverlay" class="bg-overlay"></div>
+
+  <!-- Ambient Audio-Reactive Glow Layer -->
+  <div id="ambientGlow" class="ambient-glow"></div>
+
+  <!-- Main 60-144 FPS Visualizer Canvas -->
+  <canvas id="cavaCanvas"></canvas>
+
+  <!-- Minimalist HUD Clock & Telemetry (Toggleable via Lively Settings) -->
+  <div id="hudContainer" class="hud-container pos-top-right">
+    <div class="hud-clock" id="hudTime">00:00:00</div>
+    <div class="hud-meta">
+      <span class="hud-date" id="hudDate">MON, JAN 01</span>
+      <span class="hud-divider">|</span>
+      <span class="hud-tag" id="hudTag">CAVA ENGINE</span>
+    </div>
+  </div>
+
+  <!-- Futuristic Hardware Performance Display HUD -->
+  <div id="perfHUD" class="perf-hud pos-top-left">
+    <div class="perf-header">
+      <div class="perf-title">
+        <span class="perf-indicator-dot"></span>
+        <span>DEVICE PERFORMANCE</span>
+      </div>
+      <div class="perf-fps" id="perfFps">60 FPS</div>
+    </div>
+
+    <div class="perf-grid">
+      <!-- CPU Metric -->
+      <div class="perf-card">
+        <div class="perf-card-header">
+          <span class="perf-card-label">CPU</span>
+          <span class="perf-card-val" id="cpuPercent">0.0%</span>
+        </div>
+        <div class="perf-sparkline-wrap">
+          <canvas id="cpuGraph" class="perf-canvas" width="140" height="30"></canvas>
+        </div>
+        <div class="perf-meter-track">
+          <div class="perf-meter-fill" id="cpuMeter" style="width: 0%;"></div>
+        </div>
+        <div class="perf-card-sub" id="cpuName">Processor Load</div>
+      </div>
+
+      <!-- RAM Metric -->
+      <div class="perf-card">
+        <div class="perf-card-header">
+          <span class="perf-card-label">MEMORY</span>
+          <span class="perf-card-val" id="ramPercent">0.0%</span>
+        </div>
+        <div class="perf-sparkline-wrap">
+          <canvas id="ramGraph" class="perf-canvas" width="140" height="30"></canvas>
+        </div>
+        <div class="perf-meter-track">
+          <div class="perf-meter-fill meter-ram" id="ramMeter" style="width: 0%;"></div>
+        </div>
+        <div class="perf-card-sub" id="ramDetail">0.0 / 0.0 GB</div>
+      </div>
+
+      <!-- GPU Metric -->
+      <div class="perf-card">
+        <div class="perf-card-header">
+          <span class="perf-card-label">GPU 3D</span>
+          <span class="perf-card-val" id="gpuPercent">0.0%</span>
+        </div>
+        <div class="perf-sparkline-wrap">
+          <canvas id="gpuGraph" class="perf-canvas" width="140" height="30"></canvas>
+        </div>
+        <div class="perf-meter-track">
+          <div class="perf-meter-fill meter-gpu" id="gpuMeter" style="width: 0%;"></div>
+        </div>
+        <div class="perf-card-sub" id="gpuName">Graphics Engine</div>
+      </div>
+    </div>
+
+    <div class="perf-footer">
+      <span class="perf-net-icon">⇄</span>
+      <span id="netSpeed">NET: 0.0 KB/s</span>
+      <span class="perf-footer-badge">REAL-TIME</span>
+    </div>
+  </div>
+
+  <!-- Touhou Arcane Magic Spell Circle & Now Playing Media (Right Center) -->
+  <div id="magicCircleWrap" class="magic-circle-wrap">
+    <div class="magic-circle-stage">
+      <!-- High-performance 60-144 FPS Arcane Rotation Canvas -->
+      <canvas id="magicCircleCanvas" width="360" height="360"></canvas>
+
+      <!-- Center Magical Iris: Album Cover or Touhou Yin-Yang Orb / Master Spark Core -->
+      <div class="magic-core" id="magicCore">
+        <img id="magicAlbumArt" class="magic-album-art is-hidden" alt="Album Cover">
+        <div id="magicDefaultCore" class="magic-default-core">
+          <div class="magic-rune-symbol">☯</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Glowing Now Playing Track Card -->
+    <div id="nowPlayingCard" class="now-playing-card">
+      <div class="now-playing-header">
+        <span class="now-playing-eq">
+          <span></span><span></span><span></span><span></span>
+        </span>
+        <span class="now-playing-badge">NOW PLAYING</span>
+      </div>
+      <div class="now-playing-title-wrap">
+        <div class="now-playing-title" id="trackTitle">Bad Apple!! feat. nomico</div>
+      </div>
+      <div class="now-playing-artist" id="trackArtist">Alstroemeria Records (Touhou 4)</div>
+    </div>
+  </div>
+
+  <!-- Standalone Browser Mode Controls (Automatically hidden in Lively Wallpaper) -->
+  <div id="standaloneControls" class="standalone-controls">
+    <div class="standalone-badge">
+      <span class="pulse-dot"></span>
+      <span id="standaloneStatusText">STANDALONE DEMO (SYNTH BEATS)</span>
+    </div>
+    <button id="micBtn" class="standalone-btn" title="Capture microphone / system audio input in browser">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+      </svg>
+      Enable Mic Input
+    </button>
+  </div>
+
+  <script src="cava.js"></script>
+</body>
+</html>

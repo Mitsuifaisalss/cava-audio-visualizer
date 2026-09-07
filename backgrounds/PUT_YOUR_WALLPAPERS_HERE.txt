@@ -1,0 +1,2 @@
+Drop any wallpaper images (.jpg, .jpeg, .png, .webp) here!
+They will automatically appear in Lively Wallpaper under Customize -> Background Image.

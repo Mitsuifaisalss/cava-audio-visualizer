@@ -1,0 +1,243 @@
+{
+  "labelTheme": {
+    "type": "label",
+    "value": "=== Theme & Color Scheme ==="
+  },
+  "themePreset": {
+    "type": "dropdown",
+    "text": "Theme Preset",
+    "value": 0,
+    "items": [
+      "Cyberpunk Neon",
+      "Phosphor Matrix",
+      "Sunset Amber",
+      "Tokyo Vaporwave",
+      "Nordic Ice Frost",
+      "Cava Monochrome",
+      "Chromatic Rainbow",
+      "Custom Gradient"
+    ]
+  },
+  "primaryColor": {
+    "type": "color",
+    "text": "Custom Base Color (Low)",
+    "value": "#00F2FE"
+  },
+  "secondaryColor": {
+    "type": "color",
+    "text": "Custom Peak Color (High)",
+    "value": "#FF007F"
+  },
+  "backgroundColor": {
+    "type": "color",
+    "text": "Background Color",
+    "value": "#050508"
+  },
+
+  "labelBackground": {
+    "type": "label",
+    "value": "=== Custom Wallpaper Background ==="
+  },
+  "bgMode": {
+    "type": "dropdown",
+    "text": "Background Mode",
+    "value": 1,
+    "items": [
+      "Pure OLED Dark Color",
+      "Custom Wallpaper Image (from backgrounds/)",
+      "Dynamic Audio-Reactive Dim"
+    ]
+  },
+  "bgImage": {
+    "type": "folderDropdown",
+    "text": "Wallpaper Image (backgrounds/)",
+    "value": "anime_wallpaper.jpg",
+    "folder": "backgrounds",
+    "filter": "*.jpg|*.jpeg|*.png|*.webp"
+  },
+  "bgBrightness": {
+    "type": "slider",
+    "text": "Wallpaper Brightness / Dim (%)",
+    "min": 10,
+    "max": 100,
+    "step": 5,
+    "value": 60
+  },
+  "bgBlur": {
+    "type": "slider",
+    "text": "Wallpaper Blur (px)",
+    "min": 0,
+    "max": 25,
+    "step": 1,
+    "value": 2
+  },
+
+  "labelBars": {
+    "type": "label",
+    "value": "=== Bar Style & Geometry ==="
+  },
+  "barStyle": {
+    "type": "dropdown",
+    "text": "Bar Style",
+    "value": 0,
+    "items": [
+      "Segmented Terminal Blocks",
+      "Solid Continuous Bars",
+      "Sleek Outlined Bars"
+    ]
+  },
+  "barCount": {
+    "type": "slider",
+    "text": "Number of Bars",
+    "min": 16,
+    "max": 128,
+    "step": 8,
+    "value": 64
+  },
+  "barSpacing": {
+    "type": "slider",
+    "text": "Bar Spacing (px)",
+    "min": 1,
+    "max": 16,
+    "step": 1,
+    "value": 4
+  },
+  "placement": {
+    "type": "dropdown",
+    "text": "Visualizer Position",
+    "value": 0,
+    "items": [
+      "Bottom (Classic CAVA)",
+      "Center Mirror (Symmetric)",
+      "Top Ceiling"
+    ]
+  },
+  "maxHeight": {
+    "type": "slider",
+    "text": "Max Bar Height (%)",
+    "min": 20,
+    "max": 90,
+    "step": 5,
+    "value": 65
+  },
+
+  "labelPhysics": {
+    "type": "label",
+    "value": "=== Physics & Dynamics ==="
+  },
+  "sensitivity": {
+    "type": "slider",
+    "text": "Audio Sensitivity (Gain)",
+    "min": 5,
+    "max": 30,
+    "step": 1,
+    "value": 14
+  },
+  "smoothing": {
+    "type": "slider",
+    "text": "Gravity Smoothing (%)",
+    "min": 30,
+    "max": 95,
+    "step": 5,
+    "value": 75
+  },
+  "showPeaks": {
+    "type": "checkbox",
+    "text": "Show Floating Peak Caps",
+    "value": true
+  },
+  "peakDecay": {
+    "type": "slider",
+    "text": "Peak Drop Speed",
+    "min": 1,
+    "max": 10,
+    "step": 1,
+    "value": 4
+  },
+
+  "labelAmbience": {
+    "type": "label",
+    "value": "=== Visual Ambience & HUD ==="
+  },
+  "ambientGlow": {
+    "type": "checkbox",
+    "text": "Audio Reactive Ambient Glow",
+    "value": true
+  },
+  "showClock": {
+    "type": "checkbox",
+    "text": "Minimal Terminal Clock",
+    "value": true
+  },
+  "clockPosition": {
+    "type": "dropdown",
+    "text": "Clock Position",
+    "value": 0,
+    "items": [
+      "Top Right",
+      "Top Center",
+      "Top Left",
+      "Center Screen"
+    ]
+  },
+
+  "labelPerformance": {
+    "type": "label",
+    "value": "=== Device Performance Monitor ==="
+  },
+  "showPerformance": {
+    "type": "checkbox",
+    "text": "Show Hardware Performance HUD",
+    "value": true
+  },
+  "perfPosition": {
+    "type": "dropdown",
+    "text": "Performance HUD Position",
+    "value": 0,
+    "items": [
+      "Top Left",
+      "Top Right",
+      "Bottom Left",
+      "Bottom Right"
+    ]
+  },
+  "perfOpacity": {
+    "type": "slider",
+    "text": "HUD Transparency (%)",
+    "min": 20,
+    "max": 100,
+    "step": 5,
+    "value": 85
+  },
+
+  "labelMagic": {
+    "type": "label",
+    "value": "=== Touhou Magic Circle & Music ==="
+  },
+  "showMagicCircle": {
+    "type": "checkbox",
+    "text": "Show Touhou Magic Circle",
+    "value": true
+  },
+  "circleSize": {
+    "type": "slider",
+    "text": "Magic Circle Size (px)",
+    "min": 180,
+    "max": 420,
+    "step": 10,
+    "value": 280
+  },
+  "circleSpeed": {
+    "type": "slider",
+    "text": "Circle Rotation Speed",
+    "min": 1,
+    "max": 10,
+    "step": 1,
+    "value": 4
+  },
+  "showNowPlaying": {
+    "type": "checkbox",
+    "text": "Show Music Track Details",
+    "value": true
+  }
+}
