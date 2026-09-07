@@ -38,8 +38,15 @@
     bgMode: 1, // 0: Pure OLED Dark, 1: Custom Image (backgrounds/), 2: Dynamic Audio-Reactive Dim
     bgImage: 'anime_wallpaper.jpg',
     bgBrightness: 60, // %
-    bgBlur: 2 // px
+    bgBlur: 2, // px
+    targetFps: 60 // 60: Smooth, 30: Battery saver, 0: Uncapped
   };
+
+  // Frame pacing and efficiency throttles
+  let targetFps = 60;
+  let frameInterval = 1000 / 60;
+  let lastFrameTime = 0;
+  let lastGlowEnergy = -1;
 
   // --- Theme Palettes Definition ---
   const themes = [
@@ -208,7 +215,8 @@
 
   // --- Initialization & Resizing ---
   function resize() {
-    dpr = window.devicePixelRatio || 1;
+    // Cap DPR to 1.25 to prevent 4x-8x fill-rate overhead on Intel UHD integrated graphics
+    dpr = Math.min(1.25, window.devicePixelRatio || 1);
     width = window.innerWidth;
     height = window.innerHeight;
 
@@ -461,11 +469,9 @@
           }
         }
 
-        // Floating Peak Cap for Segmented Mode
+        // Floating Peak Cap for Segmented Mode (Optimized: zero shadowBlur)
         if (config.showPeaks && peak > segHeight) {
           ctx.fillStyle = theme.peakColor;
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = theme.peakColor;
 
           if (config.placement === 0) {
             const peakY = baseY - peak - segHeight;
@@ -479,7 +485,6 @@
             const peakY = baseY + peak;
             drawRoundedRect(ctx, x, peakY, barWidth, segHeight, 1.5);
           }
-          ctx.shadowBlur = 0;
         }
 
       } else if (config.barStyle === 1) {
@@ -495,11 +500,9 @@
           drawRoundedRect(ctx, x, baseY, barWidth, h, 2);
         }
 
-        // Floating Peak Cap
+        // Floating Peak Cap (Optimized: zero shadowBlur)
         if (config.showPeaks && peak > 4) {
           ctx.fillStyle = theme.peakColor;
-          ctx.shadowBlur = 10;
-          ctx.shadowColor = theme.peakColor;
           const capH = Math.max(2, Math.min(4, barWidth * 0.4));
 
           if (config.placement === 0) {
@@ -511,7 +514,6 @@
           } else {
             drawRoundedRect(ctx, x, baseY + peak + 2, barWidth, capH, 1);
           }
-          ctx.shadowBlur = 0;
         }
 
       } else if (config.barStyle === 2) {
@@ -544,16 +546,13 @@
       }
     }
 
-    // --- Dynamic Ambient Glow Update ---
+    // --- Dynamic Ambient Glow Update (Throttled for CPU/GPU efficiency) ---
     if (config.ambientGlow && ambientGlowEl) {
       const avgEnergyRatio = Math.min(1, totalEnergy / (barCount * maxPxHeight * 0.4));
-      const glowOpacity = 0.2 + avgEnergyRatio * 0.45;
-      ambientGlowEl.style.opacity = glowOpacity.toFixed(3);
-      ambientGlowEl.style.background = `radial-gradient(
-        circle at 50% ${config.placement === 1 ? '50%' : config.placement === 2 ? '10%' : '90%'},
-        ${theme.glowColor} 0%,
-        rgba(0, 0, 0, 0) 70%
-      )`;
+      if (Math.abs(avgEnergyRatio - lastGlowEnergy) > 0.025) {
+        lastGlowEnergy = avgEnergyRatio;
+        ambientGlowEl.style.opacity = (0.2 + avgEnergyRatio * 0.35).toFixed(2);
+      }
     }
   }
 
@@ -796,10 +795,6 @@
 
     context.save();
     context.translate(cx, cy);
-
-    // Magical Drop-Shadow / Aura Bloom
-    context.shadowBlur = 8 + bassEnergy * 18;
-    context.shadowColor = primaryCol;
 
     // --- Layer 1: Outermost Celestial Orbit & Cardinal Ticks (Clockwise) ---
     context.save();
@@ -1184,6 +1179,15 @@
   function animate(timestamp) {
     requestAnimationFrame(animate);
 
+    // Frame rate pacing & capping (drastically reduces GPU load on 144Hz+ monitors)
+    if (targetFps > 0 && timestamp) {
+      const elapsed = timestamp - lastFrameTime;
+      if (elapsed < frameInterval - 1.5) {
+        return; // Skip rendering this frame
+      }
+      lastFrameTime = timestamp - (elapsed % frameInterval);
+    }
+
     const now = performance.now();
 
     // FPS calculation
@@ -1428,6 +1432,11 @@
       case 'bgBlur':
         config.bgBlur = parseInt(val, 10);
         applyBackgroundSettings();
+        break;
+      case 'targetFps':
+        const fpsMap = [60, 30, 45, 0]; // 0: 60 FPS, 1: 30 FPS, 2: 45 FPS, 3: Uncapped
+        targetFps = fpsMap[val] !== undefined ? fpsMap[val] : 60;
+        frameInterval = targetFps > 0 ? 1000 / targetFps : 0;
         break;
       default:
         console.log('Lively Property:', name, val);

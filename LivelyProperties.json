@@ -1,4 +1,20 @@
 {
+  "labelEfficiency": {
+    "type": "label",
+    "value": "=== Performance & Efficiency ==="
+  },
+  "targetFps": {
+    "type": "dropdown",
+    "text": "Max Frame Rate (FPS Limit)",
+    "value": 0,
+    "items": [
+      "60 FPS (Recommended - Smooth & Efficient)",
+      "30 FPS (Ultra Power Saver - Minimal GPU)",
+      "45 FPS (Balanced)",
+      "Uncapped (Maximum)"
+    ]
+  },
+
   "labelTheme": {
     "type": "label",
     "value": "=== Theme & Color Scheme ==="
