@@ -155,6 +155,15 @@
   const gpuNameEl = document.getElementById('gpuName');
   const netSpeedEl = document.getElementById('netSpeed');
 
+  // Radial Gauges & Orbital Clock Ring Elements
+  const clockSecRingEl = document.getElementById('clockSecRing');
+  const hudSecValEl = document.getElementById('hudSecVal');
+  const cpuArcEl = document.getElementById('cpuArc');
+  const ramArcEl = document.getElementById('ramArc');
+  const gpuArcEl = document.getElementById('gpuArc');
+  const GAUGE_CIRCUMFERENCE = 188.5;
+  const SEC_CIRCUMFERENCE = 175.9;
+
   const cpuCanvas = document.getElementById('cpuGraph');
   const cpuCtx = cpuCanvas ? cpuCanvas.getContext('2d') : null;
   const ramCanvas = document.getElementById('ramGraph');
@@ -620,12 +629,22 @@
       hudTimeEl.textContent = `${hours}:${minutes}:${seconds}`;
     }
 
+    if (hudSecValEl) {
+      hudSecValEl.textContent = seconds;
+    }
+
+    if (clockSecRingEl) {
+      const secVal = now.getSeconds() + now.getMilliseconds() / 1000;
+      const offset = SEC_CIRCUMFERENCE * (1 - secVal / 60);
+      clockSecRingEl.style.strokeDashoffset = offset.toFixed(2);
+    }
+
     if (hudDateEl) {
       const options = { weekday: 'short', month: 'short', day: '2-digit' };
       hudDateEl.textContent = now.toLocaleDateString('en-US', options).toUpperCase();
     }
   }
-  setInterval(updateClock, 1000);
+  setInterval(updateClock, 200);
   updateClock();
 
   function applyHUDPlacement() {
@@ -706,6 +725,20 @@
     const r = Math.max(0, Math.min(100, ram));
     const g = Math.max(0, Math.min(100, gpu));
 
+    // Update Cyberpunk Mech Cockpit radial arc dials
+    if (cpuArcEl) {
+      const offset = GAUGE_CIRCUMFERENCE * (1 - c / 100);
+      cpuArcEl.style.strokeDashoffset = offset.toFixed(2);
+    }
+    if (ramArcEl) {
+      const offset = GAUGE_CIRCUMFERENCE * (1 - r / 100);
+      ramArcEl.style.strokeDashoffset = offset.toFixed(2);
+    }
+    if (gpuArcEl) {
+      const offset = GAUGE_CIRCUMFERENCE * (1 - g / 100);
+      gpuArcEl.style.strokeDashoffset = offset.toFixed(2);
+    }
+
     // Update history buffers for sparklines
     cpuHistory.push(c);
     cpuHistory.shift();
@@ -729,7 +762,7 @@
 
     if (netSpeedEl && net) netSpeedEl.textContent = net;
 
-    // Draw sparklines
+    // Draw sparklines (if canvas exists)
     drawSparkline(cpuCtx, cpuCanvas, cpuHistory, '#00F2FE', 'rgba(0, 242, 254, 0.28)');
     drawSparkline(ramCtx, ramCanvas, ramHistory, '#00FF88', 'rgba(0, 255, 136, 0.28)');
     drawSparkline(gpuCtx, gpuCanvas, gpuHistory, '#FF007F', 'rgba(255, 0, 127, 0.28)');

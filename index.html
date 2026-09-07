@@ -26,76 +26,104 @@
   <!-- Main 60-144 FPS Visualizer Canvas -->
   <canvas id="cavaCanvas"></canvas>
 
-  <!-- Minimalist Cyberpunk HUD Clock & Telemetry (Toggleable via Lively Settings) -->
+  <!-- Cockpit Chrono-Tactical Clock HUD (With Sweeping Orbital Seconds Ring) -->
   <div id="hudContainer" class="hud-container pos-top-right">
     <div class="hud-header">
-      <span class="hud-pulse-dot"></span>
-      <span class="hud-title-tag">CHRONO MATRIX</span>
-      <span class="hud-live-tag">LIVE</span>
+      <div class="hud-title-wrap">
+        <span class="hud-pulse-dot"></span>
+        <span class="hud-title-tag">CHRONO PROTOCOL</span>
+        <span class="hud-sys-code">HOST // SYNC</span>
+      </div>
+      <div class="hud-live-tag">ONLINE</div>
     </div>
+
     <div class="hud-clock-row">
-      <div class="hud-clock" id="hudTime">00:00:00</div>
-    </div>
-    <div class="hud-meta">
-      <span class="hud-date" id="hudDate">MON, JAN 01</span>
-      <span class="hud-divider">//</span>
-      <span class="hud-tag" id="hudTag">CAVA OS</span>
+      <!-- Orbital Seconds Ring Gauge -->
+      <div class="hud-sec-orbit-wrap">
+        <svg class="hud-sec-svg" viewBox="0 0 68 68">
+          <circle class="sec-orbit-bg" cx="34" cy="34" r="28" />
+          <circle class="sec-orbit-fill" id="clockSecRing" cx="34" cy="34" r="28" />
+        </svg>
+        <div class="hud-sec-center" id="hudSecVal">00</div>
+      </div>
+
+      <!-- Main Time & Date Telemetry -->
+      <div class="hud-time-main">
+        <div class="hud-clock" id="hudTime">00:00:00</div>
+        <div class="hud-meta">
+          <span class="hud-date" id="hudDate">TUE, SEP 08</span>
+          <span class="hud-divider">//</span>
+          <span class="hud-tag" id="hudTag">CAVA ENGINE</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Futuristic Cyberpunk Hardware Telemetry HUD -->
+  <!-- Cyberpunk Mech Cockpit Telemetry HUD (With Radial Arc Dials) -->
   <div id="perfHUD" class="perf-hud pos-top-left">
     <div class="perf-header">
       <div class="perf-title">
         <span class="perf-indicator-dot"></span>
-        <span class="perf-title-text">SYSTEM TELEMETRY</span>
+        <span class="perf-title-text">COCKPIT TELEMETRY</span>
         <span class="perf-sys-tag">DIAG // 01</span>
       </div>
       <div class="perf-fps" id="perfFps">60 FPS</div>
     </div>
 
     <div class="perf-grid">
-      <!-- CPU Metric -->
+      <!-- CPU Radial Gauge Module -->
       <div class="perf-card perf-card-cpu">
         <div class="perf-card-header">
           <span class="perf-tag-pill tag-cpu">CPU</span>
-          <span class="perf-card-val" id="cpuPercent">0.0%</span>
+          <span class="perf-card-subtag">HOST</span>
         </div>
-        <div class="perf-sparkline-wrap">
-          <canvas id="cpuGraph" class="perf-canvas" width="160" height="32"></canvas>
+        <div class="perf-gauge-wrap">
+          <svg class="perf-gauge-svg" viewBox="0 0 76 76">
+            <circle class="gauge-bg" cx="38" cy="38" r="30" />
+            <circle class="gauge-arc arc-cpu" id="cpuArc" cx="38" cy="38" r="30" />
+          </svg>
+          <div class="gauge-center">
+            <span class="gauge-val" id="cpuPercent">0.0%</span>
+            <span class="gauge-unit">LOAD</span>
+          </div>
         </div>
-        <div class="perf-meter-track">
-          <div class="perf-meter-fill meter-cpu" id="cpuMeter" style="width: 0%;"></div>
-        </div>
-        <div class="perf-card-sub" id="cpuName">Processor Load</div>
+        <div class="perf-card-sub" id="cpuName">Processor Core</div>
       </div>
 
-      <!-- RAM Metric -->
+      <!-- RAM Radial Gauge Module -->
       <div class="perf-card perf-card-ram">
         <div class="perf-card-header">
           <span class="perf-tag-pill tag-ram">RAM</span>
-          <span class="perf-card-val" id="ramPercent">0.0%</span>
+          <span class="perf-card-subtag">MEM</span>
         </div>
-        <div class="perf-sparkline-wrap">
-          <canvas id="ramGraph" class="perf-canvas" width="160" height="32"></canvas>
-        </div>
-        <div class="perf-meter-track">
-          <div class="perf-meter-fill meter-ram" id="ramMeter" style="width: 0%;"></div>
+        <div class="perf-gauge-wrap">
+          <svg class="perf-gauge-svg" viewBox="0 0 76 76">
+            <circle class="gauge-bg" cx="38" cy="38" r="30" />
+            <circle class="gauge-arc arc-ram" id="ramArc" cx="38" cy="38" r="30" />
+          </svg>
+          <div class="gauge-center">
+            <span class="gauge-val" id="ramPercent">0.0%</span>
+            <span class="gauge-unit">USED</span>
+          </div>
         </div>
         <div class="perf-card-sub" id="ramDetail">0.0 / 0.0 GB</div>
       </div>
 
-      <!-- GPU Metric -->
+      <!-- GPU Radial Gauge Module -->
       <div class="perf-card perf-card-gpu">
         <div class="perf-card-header">
           <span class="perf-tag-pill tag-gpu">GPU</span>
-          <span class="perf-card-val" id="gpuPercent">0.0%</span>
+          <span class="perf-card-subtag">3D</span>
         </div>
-        <div class="perf-sparkline-wrap">
-          <canvas id="gpuGraph" class="perf-canvas" width="160" height="32"></canvas>
-        </div>
-        <div class="perf-meter-track">
-          <div class="perf-meter-fill meter-gpu" id="gpuMeter" style="width: 0%;"></div>
+        <div class="perf-gauge-wrap">
+          <svg class="perf-gauge-svg" viewBox="0 0 76 76">
+            <circle class="gauge-bg" cx="38" cy="38" r="30" />
+            <circle class="gauge-arc arc-gpu" id="gpuArc" cx="38" cy="38" r="30" />
+          </svg>
+          <div class="gauge-center">
+            <span class="gauge-val" id="gpuPercent">0.0%</span>
+            <span class="gauge-unit">CORE</span>
+          </div>
         </div>
         <div class="perf-card-sub" id="gpuName">Graphics Engine</div>
       </div>
@@ -110,6 +138,20 @@
         <span class="perf-footer-badge">REAL-TIME</span>
       </div>
     </div>
+  </div>
+
+  <!-- Studio Audio Spectrum Frequency Axis -->
+  <div id="freqAxis" class="freq-axis">
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">30Hz</span></div>
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">60Hz</span></div>
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">125Hz</span></div>
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">250Hz</span></div>
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">500Hz</span></div>
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">1kHz</span></div>
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">2kHz</span></div>
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">4kHz</span></div>
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">8kHz</span></div>
+    <div class="freq-tick-item"><span class="tick-line"></span><span class="tick-label">16kHz</span></div>
   </div>
 
   <!-- Touhou Arcane Magic Spell Circle & Now Playing Media (Right Center) -->
