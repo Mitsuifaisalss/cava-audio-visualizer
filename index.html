@@ -26,50 +26,58 @@
   <!-- Main 60-144 FPS Visualizer Canvas -->
   <canvas id="cavaCanvas"></canvas>
 
-  <!-- Minimalist HUD Clock & Telemetry (Toggleable via Lively Settings) -->
+  <!-- Minimalist Cyberpunk HUD Clock & Telemetry (Toggleable via Lively Settings) -->
   <div id="hudContainer" class="hud-container pos-top-right">
-    <div class="hud-clock" id="hudTime">00:00:00</div>
+    <div class="hud-header">
+      <span class="hud-pulse-dot"></span>
+      <span class="hud-title-tag">CHRONO MATRIX</span>
+      <span class="hud-live-tag">LIVE</span>
+    </div>
+    <div class="hud-clock-row">
+      <div class="hud-clock" id="hudTime">00:00:00</div>
+    </div>
     <div class="hud-meta">
       <span class="hud-date" id="hudDate">MON, JAN 01</span>
-      <span class="hud-divider">|</span>
-      <span class="hud-tag" id="hudTag">CAVA ENGINE</span>
+      <span class="hud-divider">//</span>
+      <span class="hud-tag" id="hudTag">CAVA OS</span>
     </div>
   </div>
 
-  <!-- Futuristic Hardware Performance Display HUD -->
+  <!-- Futuristic Cyberpunk Hardware Telemetry HUD -->
   <div id="perfHUD" class="perf-hud pos-top-left">
     <div class="perf-header">
       <div class="perf-title">
         <span class="perf-indicator-dot"></span>
-        <span>DEVICE PERFORMANCE</span>
+        <span class="perf-title-text">SYSTEM TELEMETRY</span>
+        <span class="perf-sys-tag">DIAG // 01</span>
       </div>
       <div class="perf-fps" id="perfFps">60 FPS</div>
     </div>
 
     <div class="perf-grid">
       <!-- CPU Metric -->
-      <div class="perf-card">
+      <div class="perf-card perf-card-cpu">
         <div class="perf-card-header">
-          <span class="perf-card-label">CPU</span>
+          <span class="perf-tag-pill tag-cpu">CPU</span>
           <span class="perf-card-val" id="cpuPercent">0.0%</span>
         </div>
         <div class="perf-sparkline-wrap">
-          <canvas id="cpuGraph" class="perf-canvas" width="140" height="30"></canvas>
+          <canvas id="cpuGraph" class="perf-canvas" width="160" height="32"></canvas>
         </div>
         <div class="perf-meter-track">
-          <div class="perf-meter-fill" id="cpuMeter" style="width: 0%;"></div>
+          <div class="perf-meter-fill meter-cpu" id="cpuMeter" style="width: 0%;"></div>
         </div>
         <div class="perf-card-sub" id="cpuName">Processor Load</div>
       </div>
 
       <!-- RAM Metric -->
-      <div class="perf-card">
+      <div class="perf-card perf-card-ram">
         <div class="perf-card-header">
-          <span class="perf-card-label">MEMORY</span>
+          <span class="perf-tag-pill tag-ram">RAM</span>
           <span class="perf-card-val" id="ramPercent">0.0%</span>
         </div>
         <div class="perf-sparkline-wrap">
-          <canvas id="ramGraph" class="perf-canvas" width="140" height="30"></canvas>
+          <canvas id="ramGraph" class="perf-canvas" width="160" height="32"></canvas>
         </div>
         <div class="perf-meter-track">
           <div class="perf-meter-fill meter-ram" id="ramMeter" style="width: 0%;"></div>
@@ -78,13 +86,13 @@
       </div>
 
       <!-- GPU Metric -->
-      <div class="perf-card">
+      <div class="perf-card perf-card-gpu">
         <div class="perf-card-header">
-          <span class="perf-card-label">GPU 3D</span>
+          <span class="perf-tag-pill tag-gpu">GPU</span>
           <span class="perf-card-val" id="gpuPercent">0.0%</span>
         </div>
         <div class="perf-sparkline-wrap">
-          <canvas id="gpuGraph" class="perf-canvas" width="140" height="30"></canvas>
+          <canvas id="gpuGraph" class="perf-canvas" width="160" height="32"></canvas>
         </div>
         <div class="perf-meter-track">
           <div class="perf-meter-fill meter-gpu" id="gpuMeter" style="width: 0%;"></div>
@@ -94,9 +102,13 @@
     </div>
 
     <div class="perf-footer">
-      <span class="perf-net-icon">⇄</span>
-      <span id="netSpeed">NET: 0.0 KB/s</span>
-      <span class="perf-footer-badge">REAL-TIME</span>
+      <div class="perf-net-block">
+        <span class="perf-net-icon">⇄</span>
+        <span id="netSpeed">NET: 0.0 KB/s</span>
+      </div>
+      <div class="perf-status-pill">
+        <span class="perf-footer-badge">REAL-TIME</span>
+      </div>
     </div>
   </div>
 

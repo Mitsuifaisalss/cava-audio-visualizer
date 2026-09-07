@@ -103,7 +103,7 @@ html, body {
   will-change: transform;
 }
 
-/* Minimalist HUD Clock & Telemetry (High Efficiency Glassmorphism) */
+/* Minimalist Cyberpunk HUD Clock & Telemetry */
 .hud-container {
   position: absolute;
   z-index: 10;
@@ -111,11 +111,50 @@ html, body {
   flex-direction: column;
   pointer-events: none;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  background: rgba(10, 13, 22, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 14px 22px;
+  background: linear-gradient(135deg, rgba(8, 12, 20, 0.94) 0%, rgba(5, 7, 14, 0.98) 100%);
+  border: 1px solid rgba(0, 242, 254, 0.18);
+  border-top: 2px solid var(--theme-primary);
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  padding: 12px 20px;
+}
+
+/* Header inside Clock */
+.hud-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.hud-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--theme-primary);
+  box-shadow: 0 0 8px var(--theme-primary);
+  animation: pulseAnimation 2s infinite ease-in-out;
+}
+
+.hud-title-tag {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+}
+
+.hud-live-tag {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #00FF88;
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 4px;
+  padding: 1px 5px;
+  letter-spacing: 0.8px;
 }
 
 /* HUD Placement Variants */
@@ -150,14 +189,19 @@ html, body {
   padding: 24px 40px;
 }
 
+.hud-clock-row {
+  display: flex;
+  align-items: baseline;
+}
+
 .hud-clock {
   font-family: var(--font-mono);
-  font-size: 2.75rem;
+  font-size: 2.6rem;
   font-weight: 700;
   letter-spacing: 2px;
-  line-height: 1.1;
+  line-height: 1.05;
   color: #FFFFFF;
-  text-shadow: 0 0 20px rgba(0, 242, 254, 0.5), 0 0 40px rgba(255, 0, 127, 0.3);
+  text-shadow: 0 0 16px rgba(0, 242, 254, 0.45);
 }
 
 .hud-container.pos-center .hud-clock {
@@ -170,19 +214,27 @@ html, body {
   gap: 8px;
   margin-top: 6px;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.74rem;
   color: var(--text-muted);
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
 }
 
+.hud-date {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
 .hud-divider {
-  opacity: 0.3;
+  color: var(--theme-primary);
+  opacity: 0.5;
+  font-weight: 700;
 }
 
 .hud-tag {
   color: var(--theme-primary);
   font-weight: 600;
+  letter-spacing: 1px;
 }
 
 /* Standalone Browser Preview HUD Controls */
@@ -265,7 +317,7 @@ html, body {
 }
 
 /* ==========================================================================
-   Futuristic Hardware Performance Display HUD
+   Futuristic Cyberpunk Hardware Telemetry HUD
    ========================================================================== */
 
 .perf-hud {
@@ -275,13 +327,14 @@ html, body {
   flex-direction: column;
   pointer-events: none;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  background: rgba(8, 11, 18, 0.90);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
-  padding: 14px 18px;
-  min-width: 440px;
-  max-width: 480px;
+  background: linear-gradient(135deg, rgba(8, 12, 20, 0.94) 0%, rgba(5, 7, 14, 0.98) 100%);
+  border: 1px solid rgba(0, 242, 254, 0.18);
+  border-top: 2px solid var(--theme-primary);
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  padding: 12px 18px;
+  min-width: 480px;
+  max-width: 530px;
 }
 
 /* Performance HUD Positioning */
@@ -318,12 +371,6 @@ html, body {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: rgba(255, 255, 255, 0.85);
-  text-transform: uppercase;
 }
 
 .perf-indicator-dot {
@@ -335,14 +382,31 @@ html, body {
   animation: pulseAnimation 2s infinite ease-in-out;
 }
 
+.perf-title-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+}
+
+.perf-sys-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--theme-primary);
+  opacity: 0.8;
+  letter-spacing: 0.8px;
+}
+
 .perf-fps {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--theme-primary);
-  background: rgba(0, 242, 254, 0.1);
-  border: 1px solid rgba(0, 242, 254, 0.2);
-  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #00FF88;
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 6px;
   padding: 2px 8px;
   letter-spacing: 0.5px;
 }
@@ -356,8 +420,9 @@ html, body {
 
 .perf-card {
   flex: 1;
+  min-width: 0;
   background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
   padding: 8px 10px;
   display: flex;
@@ -367,33 +432,56 @@ html, body {
 .perf-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  font-family: var(--font-mono);
+  align-items: center;
+  gap: 6px;
 }
 
-.perf-card-label {
+.perf-tag-pill {
+  font-family: var(--font-mono);
   font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.tag-cpu {
+  color: #00F2FE;
+  background: rgba(0, 242, 254, 0.12);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+.tag-ram {
+  color: #00FF88;
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.tag-gpu {
+  color: #FF007F;
+  background: rgba(255, 0, 127, 0.12);
+  border: 1px solid rgba(255, 0, 127, 0.3);
 }
 
 .perf-card-val {
-  font-size: 0.88rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
   font-weight: 700;
   color: #FFFFFF;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .perf-sparkline-wrap {
-  margin: 4px 0;
-  height: 28px;
+  margin: 4px 0 5px 0;
+  height: 26px;
   display: flex;
   align-items: center;
 }
 
 .perf-canvas {
   width: 100%;
-  height: 28px;
+  height: 26px;
   display: block;
 }
 
@@ -407,9 +495,12 @@ html, body {
 
 .perf-meter-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--theme-primary), var(--theme-secondary));
   transition: width 0.3s ease;
   border-radius: 2px;
+}
+
+.perf-meter-fill.meter-cpu {
+  background: linear-gradient(90deg, #00F2FE, #9B51E0);
 }
 
 .perf-meter-fill.meter-ram {
@@ -423,11 +514,12 @@ html, body {
 .perf-card-sub {
   font-family: var(--font-mono);
   font-size: 0.62rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.5);
   margin-top: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.3px;
 }
 
 /* Footer */
@@ -438,23 +530,30 @@ html, body {
   justify-content: space-between;
   font-family: var(--font-mono);
   font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.5);
   border-top: 1px solid rgba(255, 255, 255, 0.04);
   padding-top: 6px;
 }
 
+.perf-net-block {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .perf-net-icon {
   color: var(--theme-primary);
-  margin-right: 4px;
 }
 
 .perf-footer-badge {
   font-size: 0.58rem;
   color: #00FF88;
-  background: rgba(0, 255, 136, 0.1);
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid rgba(0, 255, 136, 0.25);
   padding: 1px 6px;
-  border-radius: 6px;
+  border-radius: 4px;
   letter-spacing: 0.5px;
+  font-weight: 600;
 }
 
 /* ==========================================================================

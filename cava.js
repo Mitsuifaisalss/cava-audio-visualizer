@@ -652,6 +652,18 @@
     }
   }
 
+  // --- Hardware Label Cleaner ---
+  function formatHardwareName(name) {
+    if (!name) return '';
+    return name
+      .replace(/\(R\)|\(TM\)/gi, '')
+      .replace(/\b1[0-9]th Gen\b/gi, '')
+      .replace(/Laptop GPU/gi, '')
+      .replace(/Graphics Engine/gi, 'GPU Engine')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   // --- Performance HUD Display & Sparkline Rendering ---
   function drawSparkline(context, canvasEl, history, strokeColor, fillColor) {
     if (!context || !canvasEl) return;
@@ -663,16 +675,18 @@
 
     const step = w / (history.length - 1);
     context.beginPath();
-    context.moveTo(0, h - (history[0] / 100) * (h - 4) - 2);
+    context.moveTo(0, h - (history[0] / 100) * (h - 6) - 3);
 
     for (let i = 1; i < history.length; i++) {
       const x = i * step;
-      const y = h - (history[i] / 100) * (h - 4) - 2;
+      const y = h - (history[i] / 100) * (h - 6) - 3;
       context.lineTo(x, y);
     }
 
     context.strokeStyle = strokeColor;
-    context.lineWidth = 1.6;
+    context.lineWidth = 1.8;
+    context.lineJoin = 'round';
+    context.lineCap = 'round';
     context.stroke();
 
     // Fill under sparkline curve with translucent neon gradient
@@ -703,7 +717,7 @@
     // Update text & progress meters
     if (cpuPercentEl) cpuPercentEl.textContent = `${c.toFixed(1)}%`;
     if (cpuMeterEl) cpuMeterEl.style.width = `${c}%`;
-    if (cpuNameEl && cpuName) cpuNameEl.textContent = cpuName;
+    if (cpuNameEl && cpuName) cpuNameEl.textContent = formatHardwareName(cpuName);
 
     if (ramPercentEl) ramPercentEl.textContent = `${r.toFixed(1)}%`;
     if (ramMeterEl) ramMeterEl.style.width = `${r}%`;
@@ -711,7 +725,7 @@
 
     if (gpuPercentEl) gpuPercentEl.textContent = `${g.toFixed(1)}%`;
     if (gpuMeterEl) gpuMeterEl.style.width = `${g}%`;
-    if (gpuNameEl && gpuName) gpuNameEl.textContent = gpuName;
+    if (gpuNameEl && gpuName) gpuNameEl.textContent = formatHardwareName(gpuName);
 
     if (netSpeedEl && net) netSpeedEl.textContent = net;
 
