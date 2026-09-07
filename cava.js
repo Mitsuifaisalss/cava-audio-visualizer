@@ -118,9 +118,18 @@
     }
   ];
 
+  // Request high-performance discrete GPU (NVIDIA) in Chromium/WebView2
+  try {
+    const gpuSelector = document.createElement('canvas');
+    gpuSelector.width = 1;
+    gpuSelector.height = 1;
+    const gl = gpuSelector.getContext('webgl2', { powerPreference: 'high-performance' }) ||
+               gpuSelector.getContext('webgl', { powerPreference: 'high-performance' });
+  } catch (e) {}
+
   // --- Internal Engine State ---
   const canvas = document.getElementById('cavaCanvas');
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
   const customBgEl = document.getElementById('customBg');
   const bgImgEl = document.getElementById('bgImg');
   const bgOverlayEl = document.getElementById('bgOverlay');
