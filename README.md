@@ -53,22 +53,38 @@
 
 ## 🚀 Visual Step-by-Step Installation Guide
 
+> [!IMPORTANT]
+> **⚠️ IMPORTANT NOTE FOR GITHUB ZIP DOWNLOADS (`cava-audio-visualizer-main.zip`):**
+> If you clicked the green **Code ➔ Download ZIP** button on GitHub, GitHub packages the repository inside a subfolder (`cava-audio-visualizer-main/`).
+> **Do NOT drop the raw downloaded `cava-audio-visualizer-main.zip` file directly into Lively Wallpaper** — Lively will say `Unable to import wallpaper` because it cannot find `LivelyInfo.json` at the root of the archive.
+>
+> **Solution (Takes 10 seconds):**
+> 1. Right-click `cava-audio-visualizer-main.zip` ➔ **Extract All...** (展開).
+> 2. Drag the **extracted folder** (or `index.html`) directly into Lively Wallpaper!
+
+---
+
 ### 📍 Step 1: Install into Lively Wallpaper
 
 You can install the wallpaper using either **Drag & Drop** (fastest) or the **Add Wallpaper** button:
 
 ![Step 1: Install into Lively Wallpaper](docs/step1_install.png)
 
-#### Option A: Drag and Drop (Recommended)
-1. Download or clone this repository, or grab `Cava-Audio-Visualizer.zip`.
-2. Open **Lively Wallpaper** on your desktop.
-3. Drag and drop `Cava-Audio-Visualizer.zip` (or the folder) directly into the Lively Wallpaper Library window.
-4. Click **OK** in the confirmation dialog. The wallpaper is applied immediately!
+#### Option A: Drag and Drop Extracted Folder (Fastest & Guaranteed)
+1. Download the repository as a ZIP or clone it:
+   ```bash
+   git clone https://github.com/Mitsuifaisalss/cava-audio-visualizer.git
+   ```
+2. If you downloaded the ZIP, **Extract** it so you have the normal folder `cava-audio-visualizer-main`.
+3. Open **Lively Wallpaper** on your desktop.
+4. Drag and drop the **extracted folder** (or drag `index.html` inside it) directly into the Lively Wallpaper Library window.
+5. Click **OK** in the confirmation dialog. The wallpaper is applied immediately!
 
-#### Option B: Manual Import
-1. In Lively Wallpaper, click the **`+ Add Wallpaper`** button in the top-right corner.
-2. Click **Browse** and select `Cava-Audio-Visualizer.zip` or navigate to the folder and select `index.html`.
-3. Confirm title and description, then click **OK**.
+#### Option B: Manual Import via Browse
+1. Open Lively Wallpaper and click the **`+ Add Wallpaper`** button in the top-right corner.
+2. Click **Browse**.
+3. Navigate into your extracted folder and select **`index.html`** (or select a `.livelyzip` package).
+4. Confirm title and description, then click **OK**.
 
 ---
 
@@ -149,6 +165,13 @@ All settings are adjustable in real-time from Lively Wallpaper's **Customise** p
 ---
 
 ## 🛠️ Troubleshooting
+
+### "Unable to Import Wallpaper" or Error When Dropping ZIP?
+- **Why this happens**: When you download a repository via GitHub's green **Code ➔ Download ZIP** button, GitHub places all repository files inside a root folder named `cava-audio-visualizer-main/`. Lively Wallpaper cannot automatically detect `LivelyInfo.json` if it is nested inside a subfolder inside a zip.
+- **The Fix**: 
+  1. Right-click the downloaded `.zip` file on your computer and click **Extract All...** (展開).
+  2. Drag the **extracted folder** (or drag `index.html` inside it) directly into Lively Wallpaper!
+  3. Alternatively, click **`+ Add Wallpaper`** in Lively ➔ **Browse** ➔ select `index.html`.
 
 ### Audio Not Visualizing?
 1. Open Lively Wallpaper **Settings** &rarr; **Audio**:
