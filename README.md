@@ -14,6 +14,13 @@
 
 *A console-inspired CAVA audio visualizer live wallpaper featuring a dynamic Touhou spell circle, real-time hardware telemetry HUD, and full custom background wallpaper integration.*
 
+<br/>
+
+### ⚡ 1-Click Install for Lively Wallpaper (No Extraction Needed):
+[![Download .livelyzip](https://img.shields.io/badge/Download-cava--visualizer.livelyzip-00F2FE?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Mitsuifaisalss/cava-audio-visualizer/raw/main/release/cava-visualizer.livelyzip)
+
+*(Download this file and drag & drop it straight into Lively Wallpaper — it will install instantly!)*
+
 ---
 
 [Quick Start](#-installation-guide) •
